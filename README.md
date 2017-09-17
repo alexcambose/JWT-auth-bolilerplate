@@ -8,7 +8,7 @@ npm install
 ```
 
 ## Usage
-`npm run dev` will start a development server with [nodemon]()
+`npm run dev` will start a development server with [nodemon](https://nodemon.io/)
 
 `npm run prod` will start `NODE_ENV=production` production server
 
