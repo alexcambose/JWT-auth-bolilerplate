@@ -21,5 +21,5 @@ app.use('/', require('./routes/index'));
 app.listen(config.port, () => {
     utils.info('App listening on port ' + config.port);
     utils.info('http://localhost:' + config.port);
-    // require('opn')('http://localhost:'+config.port); TODO uncomment this
+    require('opn')('http://localhost:'+config.port); TODO uncomment this
 });
