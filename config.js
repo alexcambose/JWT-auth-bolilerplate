@@ -1,5 +1,5 @@
 module.exports = {
-    port: process.env.PORT || 3000,
+    port: process.env.NODE_PORT || 3000,
     mongoose: {
         Promise: require('bluebird'), //mongoose promise library
         connection: 'mongodb://localhost:27017/test',

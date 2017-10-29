@@ -14,3 +14,4 @@ mongoose.connect(config.mongoose.connection, {useMongoClient: true})
         utils.error(err.message, err.name);
     });
 
+if(!config.jwt.secret || config.jwt.secret === "REPLACE THIS") utils.warn("No jwt secret key specified");
