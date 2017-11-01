@@ -65,6 +65,12 @@ Parameters:
 
 Any user field that you want to update, `_id`, `meta` and `__v` will be ignored.
 
+**POST** `/api/user/checkpassword` - Returns true if the provided *password* is the same as the user's one
+
+Parameters:
+`password` Current user password that you want to check.
+
+
 **DELETE** `/api/user` - Deletes the user
 
 ## Examples
