@@ -110,6 +110,20 @@ module.exports.update = (req, res) => {
         });
 };
 
+module.exports.checkPassword = (req,res) => {
+    const { password } = req.body;
+    if(!password) res.json({success: false, message: config.messages.NO_DATA});
+
+    User.findById(res.locals.user._id)
+        .then(user => {
+            res.json({success: true, match: (user.password === password)});
+        })
+        .catch(error => {
+            utils.error(error);
+            res.json({success: false});
+        })
+};
+
 //DELETE
 module.exports.delete = (req, res) => {
     const user = res.locals.user;
