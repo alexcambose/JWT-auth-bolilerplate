@@ -35,7 +35,7 @@ npm install
 `/` will serve files from `/public`
 
 ## Public Routes
-**POST** `/api/register`
+**POST** `/api/user/register`
 
 Parameters:
 1. `email` **unique**
@@ -43,7 +43,7 @@ Parameters:
 3. `last_name`
 4. `password`
 
-**POST** `/api/login`
+**POST** `/api/user/login`
 
 Parameters:
 1. `email`
