@@ -1,10 +1,10 @@
-const utils = require('../../utils');
-const config = require('../../../config');
+const utils = require('../utils');
+const config = require('../../config');
 const _ = require('lodash');
 
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const User = require('../../models/User');
+const User = require('../models/User');
 
 //POST
 module.exports.register = (req, res) => {

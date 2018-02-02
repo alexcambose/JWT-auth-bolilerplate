@@ -15,20 +15,22 @@ npm install
 ## File structure
 ```
 ├── app
-│   ├── logs             # Contains all the logs
-│   ├── models           # Contains all models
-│   │   └── User.js      # User model
-│   ├── routes           # contains all routes
-│   │   ├── api          # where /api/ route functions are stored
-│   │   │   └── user.js  # exports route functions to use in private.js or public.js
-│   │   ├── index.js     # separates public from private routes with a middleware
-│   │   ├── private.js   # contains all private routes
-│   │   └── public.js    # contains all public routes
-│   ├── server.js        # where the server starts and routes for the root path
-│   └── utils.js         # useful functions used in the entire application
-├── config.js            # where all JWT, Winston, Mongoose,... config goes
-├── index.js             # entry point, where mongoose connects to mongodb
-├── public               # public directory, should be used for serving static assets
+│   ├── controllers
+│   │   └── user.js         # Exports functions to use in routers
+│   ├── logs                # Contains all the logs
+│   ├── models              # Contains all models
+│   │   └── User.js         # User model
+│   ├── routes              # contains all routes
+│   │   ├── api             # where /api/ routes are stored
+│   │   │   ├── index.js    # separates public from private routes with a middleware
+│   │   │   ├── private.js  # contains all private routes
+│   │   │   └── public.js   # contains all public routes
+│   │   └── index.js        # where / routes are stored
+│   ├── server.js           # where the server starts and routes for the root path
+│   └── utils.js            # useful functions used in the entire application
+├── config.js               # where all JWT, Winston, Mongoose,... config goes
+├── index.js                # entry point, where mongoose connects to mongodb
+├── public                  # public directory, should be used for serving static assets
 │   └── index.html
 ```
 ## Static routes
