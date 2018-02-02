@@ -1,4 +1,7 @@
 # JWT-user-authentication-API-bolilerplate
+
+[![Build Status](https://travis-ci.org/alexcambose/JWT-user-authentication-API-bolilerplate.svg?branch=master)](https://travis-ci.org/alexcambose/JWT-user-authentication-API-bolilerplate)
+
 Express JSON API with JWT user authentication.
 
 ## Installation
