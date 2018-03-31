@@ -1,3 +1,4 @@
+const { asyncValidationErrors } = require('express-validator/check');
 const utils = require('../utils');
 const config = require('../../config');
 const _ = require('lodash');
@@ -7,85 +8,59 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 //POST
-module.exports.register = (req, res) => {
-    let {first_name, last_name, email, password} = req.body;
-
-    if (!utils.noEmptyParams(req.body)) res.json({success: false, message: config.messages.NO_DATA});
-    else {
-
+module.exports.register = async (req, res) => {
+    let { first_name, last_name, email, password } = req.body;
+    try {
+        await req.asyncValidationErrors();
         const user = new User({
             first_name,
             last_name,
             email,
             password
         });
-
-        User.isEmailUnique(email)
-            .then(
-                () => user.save(),
-                () => {
-                    res.json({success: false, message: config.messages.EMAIL_NOT_UNIQUE})
-                }
-            )
-            .then(() => {
-                res.json({success: true});
-                utils.info(`User '${first_name} ${last_name}' registered!`);
-            })
-            .catch(error => {
-                utils.error(error);
-                res.json({success: false})
-            });
+        await user.save();
+        res.json({success: true});
+        utils.info(`User '${first_name} ${last_name}' registered!`);
+    } catch(error) {
+        res.json({success: false, error});
     }
 };
 
 //POST
-module.exports.login = (req, res) => {
-    let {email, password} = req.body;
-
-    if (!utils.noEmptyParams(req.body)) res.json({success: false, message: config.messages.NO_DATA});
-    else
-        User.findOne({email, password}, {password: 0})
-            .exec()
-            .then(user => {
-                if (user) {
-                    user = JSON.parse(JSON.stringify(user));
-                    jwt.sign(user, config.jwt.secret, config.jwt.options, (err, token) => {
-                        res.json({
-                            success: true,
-                            user,
-                            token,
-                        });
-                    });
-                } else {
-                    res.json({success: false, message: config.messages.INVALID_CREDENTIALS});
-                }
-            })
-            .catch(error => {
-                utils.error(error);
-                res.json({success: false});
-            });
+module.exports.login = async (req, res) => {
+    let { email, password } = req.body;
+    try {
+        await req.asyncValidationErrors();
+        const user = await User.findOne({email, password}, {password: 0});
+        const token = jwt.sign(JSON.parse(JSON.stringify(user)), config.jwt.secret, config.jwt.options);
+        res.json({
+            success: true,
+            user,
+            token,
+        });
+    } catch(error) {
+        res.json({success: false, error});
+    }
 };
 
 //GET
-module.exports.info = (req, res) => {
+module.exports.info = async (req, res) => {
     /*
     We could use res.locals to serve the user data but when the data changes it will serve the old data from the JWT token
      */
-    const user = res.locals.user;
-
-    User.findById(user._id) //_id should remain the same
-        .then(user => {
-            utils.info(`User '${user.first_name} ${user.last_name}' got info!`);
-            res.json({success: true, user});
-        })
-        .catch(error => {
-            utils.error(error);
-            res.json({success: false});
-        });
+    const { _id } = res.locals.user;
+    try {
+        const user = await User.findById(_id);
+        utils.info(`User '${user.first_name} ${user.last_name}' got info!`);
+        res.json({success: true, user});        
+    } catch(error) {
+        utils.error(error);
+        res.json({success: false});
+    }
 };
 
 //POST
-module.exports.update = (req, res) => {
+module.exports.update = async (req, res) => {
     let data = req.body;
 
     //remove all the dangerous fields from the request body
@@ -95,46 +70,38 @@ module.exports.update = (req, res) => {
         return result;
     }, {});
 
-    const user = res.locals.user;
+    const { user } = res.locals;
     //set updated_at date
     const set = Object.assign(data, {'meta.updated_at': new Date});
-
-    User.findByIdAndUpdate(user._id, {$set: set})
-        .then(() => {
-            utils.info(`User '${user.first_name} ${user.last_name}' updated!`);
-            res.json({success: true});
-        })
-        .catch(error => {
-            utils.error(error);
-            res.json({success: false});
-        });
+    try {
+        await User.findByIdAndUpdate(user._id, {$set: set});
+        console.log(set);
+        utils.info(`User '${user.first_name} ${user.last_name}' updated!`);
+        res.json({success: true});
+    } catch(error) {
+        res.json({success: false, error});
+    }
 };
 
-module.exports.checkPassword = (req,res) => {
+//POST
+module.exports.checkPassword = async (req,res) => {
     const { password } = req.body;
-    if(!password) res.json({success: false, message: config.messages.NO_DATA});
-
-    User.findById(res.locals.user._id)
-        .then(user => {
-            res.json({success: true, match: (user.password === password)});
-        })
-        .catch(error => {
-            utils.error(error);
-            res.json({success: false});
-        })
+    try {
+        const user = await User.findById(res.locals.user._id);
+        res.json({success: (user.password === password)});
+    } catch(error) {
+        res.json({success: false, error});
+    }
 };
 
 //DELETE
-module.exports.delete = (req, res) => {
-    const user = res.locals.user;
-
-    User.findByIdAndRemove(user._id)
-        .then(() => {
-            utils.info(`User '${user.first_name} ${user.last_name}' deleted!`);
-            res.json({success: true});
-        })
-        .catch(error => {
-            utils.error(error);
-            res.json({success: false});
-        });
+module.exports.delete = async (req, res) => {
+    const { user } = res.locals;
+    try {
+        await User.findByIdAndRemove(user._id);
+        utils.info(`User '${user.first_name} ${user.last_name}' deleted!`);
+        res.json({success: true});
+    } catch(error) {
+        res.json({success: false, error});
+    }
 };

@@ -29,6 +29,7 @@ npm install
 │   │   │   ├── private.js  # contains all private routes
 │   │   │   └── public.js   # contains all public routes
 │   │   └── index.js        # where / routes are stored
+│   ├── translations        # message translations
 │   ├── server.js           # where the server starts and routes for the root path
 │   └── utils.js            # useful functions used in the entire application
 ├── config.js               # where all JWT, Winston, Mongoose,... config goes
@@ -134,3 +135,11 @@ fetch('http://localhost:3000/api/user/login', {
         console.log("Error connecting to server: " + error);
     });
 ```
+
+---
+Traslations helper library: [Polylang](https://github.com/alexcambose/polylang)
+
+---
+
+## License
+[MIT](https://github.com/alexcambose/JWT-user-authentication-API-bolilerplate/blob/master/LICENSE)

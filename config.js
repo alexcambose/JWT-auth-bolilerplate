@@ -25,11 +25,5 @@ module.exports = {
             //... for more config options see https://github.com/winstonjs/winston/blob/master/docs/transports.md#console-transport
         },
     },
-    messages: {
-        EMAIL_NOT_UNIQUE: 'Email is not unique',
-        NO_DATA: 'Not enough data!',
-        INVALID_CREDENTIALS: 'Wrong email or password!',
-        INVALID_TOKEN: 'Invalid token!',
-        NO_TOKEN_PROVIDED: 'You are not authenticated!',
-    }
+    errorFormatting: (param, msg, value, location) => msg, // https://github.com/ctavan/express-validator#legacy-api
 };

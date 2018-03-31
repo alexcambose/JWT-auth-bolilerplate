@@ -1,6 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const config = require('../../../config');
+const lang = require('../../translations/index');
 
 const router = express.Router();
 
@@ -14,7 +15,7 @@ router.use(publicRoutes);
 //authentication middleware
 router.use((req, res, next) => {
     const token = req.body.token || req.query.token;
-    if (!token) res.json({success: false, message: config.messages.NO_TOKEN_PROVIDED});
+    if (!token) res.json({success: false, error: lang.t('errors.authentication.token.missing')});
     else
         jwt.verify(token, config.jwt.secret, (err, decoded) => {
             if (!err) {
@@ -22,9 +23,8 @@ router.use((req, res, next) => {
                 //delete token parameter from body and query
                 delete req.body.token;
                 delete req.query.token;
-
                 next();
-            } else res.json({success: false, message: config.messages.INVALID_TOKEN});
+            } else res.json({success: false, error: lang.t('errors.authentication.token.invalid')});
         });
 });
 
