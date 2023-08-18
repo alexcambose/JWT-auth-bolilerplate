@@ -1,4 +1,4 @@
-# JWT-user-authentication-API-bolilerplate
+# JWT-auth-bolilerplate
 
 [![Build Status](https://travis-ci.org/alexcambose/JWT-user-authentication-API-bolilerplate.svg?branch=master)](https://travis-ci.org/alexcambose/JWT-user-authentication-API-bolilerplate)
 
